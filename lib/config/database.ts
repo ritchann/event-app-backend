@@ -9,7 +9,14 @@ export const database = new Sequelize(
     port: 5432,
     password:
       "5639eccb4555c8c8d158304a1e09656c53c2d0d590256f80869565b0bfeff1e5",
-    dialect: "postgres"
+    dialect: "postgres",
+    ssl: true,
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
+    },
   }
 );
 // {
