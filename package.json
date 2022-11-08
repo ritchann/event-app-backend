@@ -1,0 +1,46 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node lib/index.ts",
+    "dev": "nodemon -x ts-node lib/index.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/cors": "^2.8.8",
+    "body-parser": "^1.19.0",
+    "boto3": "0.0.1",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "ee-runner": "0.0.36",
+    "express": "^4.17.1",
+    "firebase": "^8.5.0",
+    "json": "^11.0.0",
+    "pg": "^8.4.2",
+    "pg-hstore": "^2.3.3",
+    "python": "0.0.4",
+    "python-shell": "^3.0.0",
+    "sequelize": "^5.8.9",
+    "socket.io": "^4.1.0",
+    "sys": "0.0.1",
+    "websocket": "^1.0.34",
+    "ws": "^7.4.5",
+    "ts-node": "^9.1.1",
+    "tsconfig-paths": "^3.9.0",
+    "typescript": "^4.2.3",
+    "ts-loader": "^8.0.18"
+  },
+  "devDependencies": {
+    "@types/bluebird": "^3.5.33",
+    "@types/express": "^4.17.8",
+    "@types/node": "^14.14.6",
+    "@types/sequelize": "^4.28.9",
+    "@types/validator": "^13.1.0",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.2.4",
+    "boto3": "0.0.1"
+  }
+}

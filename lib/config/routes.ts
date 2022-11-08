@@ -1,0 +1,25 @@
+import { EventController } from "../controllers/event.controller";
+import * as cors from "cors";
+
+const corsOptions: cors.CorsOptions = {
+  origin: "*",
+  methods: "*",
+  allowedHeaders: "*",
+};
+
+export class Routes {
+  public eventController: EventController = new EventController();
+
+  public routes(app): void {
+    app
+      .route("/event")
+      .get(this.eventController.index, cors(corsOptions))
+      .post(this.eventController.create, cors(corsOptions));
+
+    app
+      .route("/event/:id")
+      .get(this.eventController.show, cors(corsOptions))
+      .put(this.eventController.update, cors(corsOptions))
+      .delete(this.eventController.delete, cors(corsOptions));
+  }
+}
