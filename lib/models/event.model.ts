@@ -35,4 +35,4 @@ Event.init(
   }
 );
 
-Event.sync({ force: false }).then(() => {}); //true for create new table
+Event.sync({ force: true }).then(() => {}); //true for create new table
