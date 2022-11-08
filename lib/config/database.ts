@@ -12,7 +12,6 @@ export const database = new Sequelize(
     dialect: "postgres"
   }
 );
-
 // {
 //   database: "buildingSite", // name of database
 //   dialect: "postgres",
