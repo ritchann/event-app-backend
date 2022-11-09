@@ -22,6 +22,7 @@ class App {
   }
 
   private config(): void {
+    this.app.use(express.static('build'));
     this.app.use(bodyParser.json({ limit: "400mb" }));
     this.app.use(bodyParser.urlencoded({ extended: false, limit: "400mb" }));
     this.app.use(express.static(path.join('public')))
