@@ -23,5 +23,5 @@ export const database =
         storage: ":memory:",
         username: "",
         password: "",
-        host: "localhost",
+        host: "",
       });
