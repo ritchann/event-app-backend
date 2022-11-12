@@ -5,7 +5,7 @@ from datetime import datetime
 
 import numpy as np
 import pandas as pd
-import pymorphy2
+from googletrans import Translator
 from sklearn.feature_extraction.text import CountVectorizer
 from telethon import TelegramClient
 from telethon import functions
@@ -71,9 +71,9 @@ def add_columns():
         event_cities[text] = ''
         event_categories[text] = ''
 
-        for items in cities:
-            if any(city.lower() in text.lower() for city in items):
-                event_cities[text] = items[0]
+        for key, value in cities.items():
+            if any(city.lower() in text.lower() for city in value):
+                event_cities[text] = key
                 break
 
         for key, value in categories.items():
@@ -82,6 +82,10 @@ def add_columns():
 
     df['City'] = df['Description'].map(event_cities)
     df['Category'] = df['Description'].map(event_categories)
+
+    for index, row in df.iterrows():
+        translator = Translator()
+        row['Description'] = translator.translate(row['Description'], dest='en').text
 
     df.to_csv(f'events_final_{datetime.now().strftime("%H:%M:%S")}.csv')
 
