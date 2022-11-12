@@ -3,7 +3,16 @@ import { UpdateOptions, DestroyOptions } from "sequelize";
 import { Event, EventInterface } from "../models/event.model";
 
 export class EventController {
-  public index(req: Request, res: Response) {
+  public getFilteredList(req: Request, res: Response) {
+    const { city, category, date } = req.query;
+    Event.findAll<Event>({
+      where: { city: city, category: category, date: date },
+    })
+      .then((events: Array<Event>) => res.json(events))
+      .catch((err: Error) => res.status(500).json(err));
+  }
+
+  public getList(req: Request, res: Response) {
     Event.findAll<Event>({})
       .then((events: Array<Event>) => res.json(events))
       .catch((err: Error) => res.status(500).json(err));

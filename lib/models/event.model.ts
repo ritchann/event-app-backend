@@ -340,6 +340,6 @@ async function createEvent() {
 }
 
 (async () => {
-  await Event.sync({ force: true }).then(() => {});
-  await createEvent();
+  await Event.sync({ force: false }).then(() => {});
+  //await createEvent();
 })();

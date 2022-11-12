@@ -12,9 +12,13 @@ export class Routes {
 
   public routes(app): void {
     app
-      .route("/api/event")
-      .get(this.eventController.index, cors(corsOptions))
+      .route("/api/event/getFilteredList")
+      .get(this.eventController.getFilteredList, cors(corsOptions))
       .post(this.eventController.create, cors(corsOptions));
+
+    app
+      .route("/api/event/getList")
+      .get(this.eventController.getList, cors(corsOptions));
 
     app
       .route("/api/event/:id")
