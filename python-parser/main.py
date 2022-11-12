@@ -12,7 +12,7 @@ from telethon import functions
 from telethon.tl.types import PeerChannel
 
 import settings
-from constants import key_words, stop_words, cities
+from constants import key_words, stop_words, cities, categories
 
 logging.basicConfig(level=logging.INFO)
 
@@ -24,20 +24,7 @@ client = TelegramClient('tgparse', api_id, api_hash)
 
 async def Main():
     # await parse_events_to_csv()
-
-    df = pd.read_csv('events_19_08_45_ok_version.csv')
-
-    event_cities = {}
-    for index, row in df.iterrows():
-        text = row['Description']
-        event_cities[text] = ''
-        for items in cities:
-            if any(city.lower() in text.lower() for city in items):
-                event_cities[text] = items[0]
-                break
-
-    df['City'] = df['Description'].map(event_cities)
-    df.to_csv('events_final.csv')
+    add_columns()
 
 
 async def parse_events_to_csv():
@@ -50,12 +37,11 @@ async def parse_events_to_csv():
 
     texts = []
 
-    async for message in client.iter_messages(channel_id, limit=200):
+    async for message in client.iter_messages(channel_id, limit=500):
+        if message.text is None:
+            continue
         text = message.text.replace(settings.tg_sec['remove_text'], '')
         text = re.sub(r'[\S]+\.(jpg|mp4)[\S]*\s?', '', text)
-
-        if text is None:
-            continue
 
         if not all(word not in text for word in stop_words):
             continue
@@ -72,6 +58,32 @@ async def parse_events_to_csv():
         events_writer.writerow(['Description'])
         for text in texts:
             events_writer.writerow([text])
+
+
+def add_columns():
+    df = pd.read_csv('events_22_58_19_ok_version.csv')
+
+    event_cities = {}
+    event_categories = {}
+
+    for index, row in df.iterrows():
+        text = row['Description']
+        event_cities[text] = ''
+        event_categories[text] = ''
+
+        for items in cities:
+            if any(city.lower() in text.lower() for city in items):
+                event_cities[text] = items[0]
+                break
+
+        for key, value in categories.items():
+            if any(word.lower() in text.lower() for word in value):
+                event_categories[text] = key
+
+    df['City'] = df['Description'].map(event_cities)
+    df['Category'] = df['Description'].map(event_categories)
+
+    df.to_csv(f'events_final_{datetime.now().strftime("%H:%M:%S")}.csv')
 
 
 def get_key_words(texts: str):
