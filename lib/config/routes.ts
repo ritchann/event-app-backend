@@ -21,9 +21,11 @@ export class Routes {
       .get(this.eventController.getList, cors(corsOptions));
 
     app
-      .route("/api/event/:id")
-      .get(this.eventController.show, cors(corsOptions))
-      .put(this.eventController.update, cors(corsOptions))
-      .delete(this.eventController.delete, cors(corsOptions));
+      .route("/api/event/getEvent/:id")
+      .get(this.eventController.getEvent, cors(corsOptions))
+
+      app
+      .route("/api/event/createEvent")
+      .put(this.eventController.createEvent, cors(corsOptions));
   }
 }
