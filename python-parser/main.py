@@ -21,9 +21,12 @@ client = TelegramClient('tgparse', api_id, api_hash)
 
 filename = f'events_{datetime.now().strftime("%H:%M:%S")}.csv'
 key_words = [
-    'приглаш', 'приглас', 'музык', 'танцы', 'программ', 'вечеринк', 'концерт', 'выставк',
-    'встреч', 'начало', 'мероприят', 'приходите', 'лекция', 'ярмарк',
-    'фестивал', 'спектакл', 'состоится'
+    'приглас', 'музык', 'танцы', 'программ', 'вечеринк', 'концерт', 'выставк',
+    'начало', 'мероприят', 'лекция', 'ярмарк', 'фестивал', 'спектакл', 'состоится',
+    'конференц', 'стендап'
+]
+stop_words = [
+    'реклама', 'инструкция', 'работ'
 ]
 
 
@@ -38,15 +41,19 @@ async def Main():
     texts = []
 
     async for message in client.iter_messages(channel_id, limit=200):
-        text = message.text
+        text = message.text.replace(settings.tg_sec['remove_text'], '')
+        text = re.sub(r'[\S]+\.(jpg|mp4)[\S]*\s?','',text)
+
         if text is None:
             continue
+
+        if not all(word not in text for word in stop_words):
+            continue
+
         for key_word in key_words:
             if key_word in text.lower():
-                texts.append(message.text)
+                texts.append(text)
                 break
-
-    texts = [s.replace(settings.tg_sec['remove_text'], '') for s in texts]
 
     with open(filename, mode='w') as events_file:
         events_writer = csv.writer(events_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
