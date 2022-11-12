@@ -5,12 +5,14 @@ from datetime import datetime
 
 import numpy as np
 import pandas as pd
+import pymorphy2
 from sklearn.feature_extraction.text import CountVectorizer
 from telethon import TelegramClient
 from telethon import functions
 from telethon.tl.types import PeerChannel
 
 import settings
+from constants import key_words, stop_words, cities
 
 logging.basicConfig(level=logging.INFO)
 
@@ -19,18 +21,26 @@ api_hash = settings.tg_sec['api_hash']
 channel_id = settings.tg_sec['channel_id']
 client = TelegramClient('tgparse', api_id, api_hash)
 
-filename = f'events_{datetime.now().strftime("%H:%M:%S")}.csv'
-key_words = [
-    'приглас', 'музык', 'танцы', 'программ', 'вечеринк', 'концерт', 'выставк',
-    'начало', 'мероприят', 'лекция', 'ярмарк', 'фестивал', 'спектакл', 'состоится',
-    'конференц', 'стендап'
-]
-stop_words = [
-    'реклама', 'инструкция', 'работ'
-]
-
 
 async def Main():
+    # await parse_events_to_csv()
+
+    df = pd.read_csv('events_19_08_45_ok_version.csv')
+
+    event_cities = {}
+    for index, row in df.iterrows():
+        text = row['Description']
+        event_cities[text] = ''
+        for items in cities:
+            if any(city.lower() in text.lower() for city in items):
+                event_cities[text] = items[0]
+                break
+
+    df['City'] = df['Description'].map(event_cities)
+    df.to_csv('events_final.csv')
+
+
+async def parse_events_to_csv():
     channel_entity = await client.get_entity(PeerChannel(channel_id))
 
     dialog = await client(functions.messages.GetPeerDialogsRequest(
@@ -42,7 +52,7 @@ async def Main():
 
     async for message in client.iter_messages(channel_id, limit=200):
         text = message.text.replace(settings.tg_sec['remove_text'], '')
-        text = re.sub(r'[\S]+\.(jpg|mp4)[\S]*\s?','',text)
+        text = re.sub(r'[\S]+\.(jpg|mp4)[\S]*\s?', '', text)
 
         if text is None:
             continue
@@ -55,6 +65,7 @@ async def Main():
                 texts.append(text)
                 break
 
+    filename = f'events_{datetime.now().strftime("%H:%M:%S")}.csv'
     with open(filename, mode='w') as events_file:
         events_writer = csv.writer(events_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
 
