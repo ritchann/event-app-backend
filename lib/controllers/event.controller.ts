@@ -52,15 +52,21 @@ export class EventController {
   }
 
   public createEvent(req: Request, res: Response) {
-    const eventId: number = parseInt(req.params.id);
     const params: EventInterface = req.body;
+    Event.create(params)
+      .then(() => res.status(202).json({ data: "success" }))
+      .catch((err: Error) => res.status(500).json(err));
+  }
 
-    const update: UpdateOptions = {
-      where: { id: eventId },
+  public updateEvent(req: Request, res: Response) {
+    const id: number = parseInt(req.params.id);
+    const params: EventInterface = req.body;
+    const options: UpdateOptions = {
+      where: { id },
       limit: 1,
     };
-
-    Event.update(params, update)
+    
+    Event.update(params, options)
       .then(() => res.status(202).json({ data: "success" }))
       .catch((err: Error) => res.status(500).json(err));
   }
