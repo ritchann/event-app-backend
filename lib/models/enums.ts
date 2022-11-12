@@ -1,4 +1,4 @@
-enum Сategory {
+export enum Сategory {
   Concert = 0,
   ForChildren = 1,
   Party = 2,
@@ -9,6 +9,7 @@ enum Сategory {
   Trip = 7,
   StandUp = 8,
   Lecture = 9,
+  All = 10,
 }
 
 enum Language {
@@ -22,4 +23,13 @@ enum Status {
   Approved = 1,
   Active = 2,
   Finished = 3,
+}
+
+export enum City {
+  Budva = 0,
+  Becici = 1,
+  HercegNovi = 2,
+  Podgorica = 3,
+  Tivat = 4,
+  All = 5
 }

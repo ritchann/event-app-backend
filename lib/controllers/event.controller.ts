@@ -1,12 +1,26 @@
 import { Request, Response } from "express";
-import { UpdateOptions, DestroyOptions } from "sequelize";
+import { Сategory } from "../models/enums";
+import { UpdateOptions, DestroyOptions, where, WhereOptions } from "sequelize";
 import { Event, EventInterface } from "../models/event.model";
 
 export class EventController {
   public getFilteredList(req: Request, res: Response) {
     const { city, category, date } = req.query;
+
+    const isAllCategory = parseInt(category.toString()) == Сategory.All;
+    const isAllCity = city == "all";
+    var whereObj = new Object();
+
+    if(!isAllCategory)
+      whereObj['category'] = category;
+      
+    if(!isAllCity)
+      whereObj['city'] = city;
+
+    whereObj['date'] = date;
+
     Event.findAll<Event>({
-      where: { city: city, category: category, date: date },
+      where: whereObj as WhereOptions,
     })
       .then((events: Array<Event>) => res.json(events))
       .catch((err: Error) => res.status(500).json(err));
@@ -26,7 +40,7 @@ export class EventController {
       .catch((err: Error) => res.status(500).json(err));
   }
 
-  public show(req: Request, res: Response) {
+  public getEvent(req: Request, res: Response) {
     const eventId: number = parseInt(req.params.id);
 
     Event.findByPk<Event>(eventId)
@@ -37,16 +51,22 @@ export class EventController {
       .catch((err: Error) => res.status(500).json(err));
   }
 
-  public update(req: Request, res: Response) {
-    const eventId: number = parseInt(req.params.id);
+  public createEvent(req: Request, res: Response) {
     const params: EventInterface = req.body;
+    Event.create(params)
+      .then(() => res.status(202).json({ data: "success" }))
+      .catch((err: Error) => res.status(500).json(err));
+  }
 
-    const update: UpdateOptions = {
-      where: { id: eventId },
+  public updateEvent(req: Request, res: Response) {
+    const id: number = parseInt(req.params.id);
+    const params: EventInterface = req.body;
+    const options: UpdateOptions = {
+      where: { id },
       limit: 1,
     };
-
-    Event.update(params, update)
+    
+    Event.update(params, options)
       .then(() => res.status(202).json({ data: "success" }))
       .catch((err: Error) => res.status(500).json(err));
   }
