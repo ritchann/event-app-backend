@@ -23,3 +23,9 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# python
+python-parser/venv
+python-parser/settings.py
+python-parser/__pycache__
+python-parser/tgparse.session
