@@ -346,7 +346,7 @@ async function createEvent() {
 
 async function createEventFromCSV() {
   const list: EventInterface[] = [];
-  fs.createReadStream(".events.csv")
+  fs.createReadStream("./events.csv")
     .pipe(parse({ delimiter: ",", from_line: 2 }))
     .on("data", async function (row) {
       await Event.create({
