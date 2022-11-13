@@ -29,5 +29,5 @@ python-parser/venv
 python-parser/settings.py
 python-parser/__pycache__
 python-parser/tgparse.session
-*.csv
+python-parser/*.csv
 .idea
