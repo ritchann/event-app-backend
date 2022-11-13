@@ -31,5 +31,9 @@ export class Routes {
     app
       .route("/api/event/updateEvent/:id")
       .post(this.eventController.updateEvent, cors(corsOptions));
+
+    app
+      .route("/api/event/getPersonalList")
+      .post(this.eventController.getPersonalList, cors(corsOptions));  
   }
 }

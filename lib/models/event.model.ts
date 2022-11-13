@@ -33,6 +33,7 @@ export interface EventInterface {
   duration: string;
 }
 
+
 Event.init(
   {
     id: {
@@ -99,7 +100,7 @@ async function createEvent() {
     📍Experience and skills are not needed , everyone can handle it ! We have a large selection of different paintings for you 👌
     
     WAITING FOR YOU 🥳`,
-    date: "16.11.2022",
+    date: "11/16/2022",
     category: 3,
     time: "13:00",
     language: 0,
@@ -114,7 +115,7 @@ async function createEvent() {
     header: "Ethnic music",
     city: "Budva",
     description: `Ethnic music performed by the virtuoso performer Vladislav Romanovsky. We are waiting for you at the restaurant Atelier.`,
-    date: "15.11.2022",
+    date: "11/15/2022",
     category: 0,
     time: "20:00",
     language: 0,
@@ -133,7 +134,7 @@ async function createEvent() {
     It is not possible to "see" such works right away — here it is necessary to look into the details and independently collect the overall picture of each frame. All photos are taken on film used twice — this is how the overlay effect is created.
     📸We invite you for new experiences, acquaintance and communication in a cultural environment.
     After the opening of the exhibition, a film screening will begin at 19:00. The title of the film is still kept secret. We will reveal the details closer to the weekend!`,
-    date: "15.11.2022",
+    date: "11/15/2022",
     category: 4,
     time: "17:00",
     language: 0,
@@ -148,7 +149,7 @@ async function createEvent() {
     header: `Playing Mafia`,
     city: "Budva",
     description: `We have a lot of fun😍😍😍`,
-    date: "15.11.2022",
+    date: "11/15/2022",
     category: 2,
     time: "18:00",
     language: 0,
@@ -164,7 +165,7 @@ async function createEvent() {
     city: "Budva",
     description: `This is a special genre for special viewers. The child, it is at this age (1-3 years), meets for the first time with such an art form as theater.
     Performances of the "baby theater" genre take place with a minimum of words, so the audience is not limited by any language barriers and what is happening on stage is clear to all children.`,
-    date: "15.11.2022",
+    date: "11/15/2022",
     category: 1,
     time: "10:00",
     language: 0,
@@ -186,7 +187,7 @@ async function createEvent() {
     🎨Why was post-impressionism NOT after Impressionism?
     🎓 Speaker: Sofia Aksenova- art critic, graduate of Moscow State University, researcher at the Tretyakov Gallery
     (We treat all guests with a glass of wine)`,
-    date: "18.11.2022",
+    date: "11/18/2022",
     category: 9,
     time: "18:00",
     language: 0,
@@ -207,7 +208,7 @@ async function createEvent() {
     🎨Why did lawyer Matisse decide to change his profession?
     🎓Speaker: Sofya Aksenova -art critic, graduate of Moscow State University, researcher at the Tretyakov Gallery
     (We treat all guests with drinks of their choice)`,
-    date: "14.11.2022",
+    date: "11/14/2022",
     category: 9,
     time: "19:00",
     language: 0,
@@ -230,7 +231,7 @@ async function createEvent() {
     📸 Photo and video shooting for tour participants and memorable shots from the trip.
     
     Details and entry: @vital_travel`,
-    date: "19.11.2022",
+    date: "11/19/2022",
     category: 7,
     time: "09:00",
     language: 0,
@@ -245,7 +246,7 @@ async function createEvent() {
     header: `Culinary Heritage Market`,
     city: "Tivat",
     description: `A Culinary Heritage Market dedicated to the promotion of traditional dishes of the Bay of Kotor will be held.`,
-    date: "14.11.2022",
+    date: "11/14/2022",
     category: 5,
     time: "18:00",
     language: 2,
@@ -261,7 +262,7 @@ async function createEvent() {
     city: "Herceg Novi",
     description: `Don't miss the last Valentino Devasko concert in Herceg Novi this year!
     Live Latin American music and dancing on Saturday 18.10 at Kontra caffe bar`,
-    date: "18.11.2022",
+    date: "11/18/2022",
     category: 2,
     time: "21:30",
     language: 1,
@@ -278,7 +279,7 @@ async function createEvent() {
     description: `The premiere of the musical "San o Boki" on the big stage of the cultural center "Budo Tomović".
 
     Musical in four acts, 24 actors, orchestra. The plot unfolds on the terraces and in the halls of the Boca Hotel.`,
-    date: "20.11.2022",
+    date: "11/20/2022",
     category: 4,
     time: "20:00",
     language: 2,
@@ -295,7 +296,7 @@ async function createEvent() {
     description: `The flute ensemble from Trieste, Trieste Flute Ensemble, will present the premiere concert.
 
     The ensemble has been in existence since 2005 and is one of the first professional flute ensembles in Europe.  The concert program includes works by authors from different parts of the world.`,
-    date: "25.11.2022",
+    date: "11/25/2022",
     category: 0,
     time: "18:00",
     language: 1,
@@ -312,7 +313,7 @@ async function createEvent() {
     description: `Rock Saturday in Podgorica 🤘🤘🤘
 
     Nikolaj Vrankovic from Belgrade and the Montenegrin band Autogeni trening will perform.`,
-    date: "25.11.2022",
+    date: "11/25/2022",
     category: 0,
     time: "20:00",
     language: 1,
@@ -327,7 +328,7 @@ async function createEvent() {
     header: `Rakia Festival`,
     city: "Podgorica ",
     description: `120 producers from Montenegro and neighboring countries will present their alcoholic beverages.`,
-    date: "04.12.2022",
+    date: "12/04/2022",
     category: 5,
     time: "18:00",
     language: 2,
@@ -340,6 +341,6 @@ async function createEvent() {
 }
 
 (async () => {
-  await Event.sync({ force: false }).then(() => {});
-  //await createEvent();
+  await Event.sync({ force: true }).then(() => {});
+  await createEvent();
 })();

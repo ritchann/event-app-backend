@@ -1,4 +1,4 @@
-export enum Сategory {
+export enum Category {
   Concert = 0,
   ForChildren = 1,
   Party = 2,
@@ -31,5 +31,41 @@ export enum City {
   HercegNovi = 2,
   Podgorica = 3,
   Tivat = 4,
-  All = 5
+  All = 5,
+}
+
+export enum PersonalСategory {
+  Anywhere = 0,
+  Dance = 1,
+  HangOut = 2,
+  TakeWalk = 3,
+  ChillOut = 4,
+  TeamBuilding = 5,
+  LearnNew = 6,
+  Drink = 7,
+  Eat = 8,
+  ForChildren = 9,
+  Sing = 10,
+  CelebrateBirthday = 11,
+  Laugh = 12,
+}
+
+export enum GoWith {
+  Myself = 0,
+  MyCouple = 1,
+  Friends = 2,
+  Family = 3,
+}
+
+export enum DayEvent {
+  Today = 0,
+  Weekends = 1,
+  Week = 2,
+}
+
+export enum TimeType {
+  Morning = 0,
+  Day = 1,
+  Afternoon = 2,
+  Night = 3,
 }

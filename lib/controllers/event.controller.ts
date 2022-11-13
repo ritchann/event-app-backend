@@ -1,23 +1,46 @@
 import { Request, Response } from "express";
-import { Сategory } from "../models/enums";
-import { UpdateOptions, DestroyOptions, where, WhereOptions } from "sequelize";
+import { PersonalСategory, Category, GoWith, DayEvent } from "../models/enums";
+import {
+  UpdateOptions,
+  DestroyOptions,
+  where,
+  WhereOptions,
+  Op,
+} from "sequelize";
 import { Event, EventInterface } from "../models/event.model";
+import { categoriesPlan, goWithList } from "../helper/helper";
+import { DateTime } from "../helper/dateTime";
+
+export interface PlanItem {
+  type: PersonalСategory;
+  list: Category[];
+}
+
+export interface PersonalInfo {
+  plan: number[];
+  day: number;
+  goWith: GoWith;
+  time: number;
+  city: string;
+}
+
+function onlyUnique(value, index, self) {
+  return self.indexOf(value) === index;
+}
 
 export class EventController {
   public getFilteredList(req: Request, res: Response) {
     const { city, category, date } = req.query;
 
-    const isAllCategory = parseInt(category.toString()) == Сategory.All;
+    const isAllCategory = parseInt(category.toString()) == Category.All;
     const isAllCity = city == "all";
     var whereObj = new Object();
 
-    if(!isAllCategory)
-      whereObj['category'] = category;
-      
-    if(!isAllCity)
-      whereObj['city'] = city;
+    if (!isAllCategory) whereObj["category"] = category;
 
-    whereObj['date'] = date;
+    if (!isAllCity) whereObj["city"] = city;
+
+    whereObj["date"] = date;
 
     Event.findAll<Event>({
       where: whereObj as WhereOptions,
@@ -65,7 +88,7 @@ export class EventController {
       where: { id },
       limit: 1,
     };
-    
+
     Event.update(params, options)
       .then(() => res.status(202).json({ data: "success" }))
       .catch((err: Error) => res.status(500).json(err));
@@ -80,6 +103,51 @@ export class EventController {
 
     Event.destroy(options)
       .then(() => res.status(204).json({ data: "success" }))
+      .catch((err: Error) => res.status(500).json(err));
+  }
+
+  public getPersonalList(req: Request, res: Response) {
+    const { plan, goWith, day } = req.body;
+    const planList = plan as number[];
+    const goWithVar = parseInt(goWith);
+    const dayVar = parseInt(day);
+    const isAnywhere = planList.includes(PersonalСategory.Anywhere);
+    const mainCategoryOptions = [];
+    var whereObj = new Object();
+
+    const result: Category[] = [];
+    if (!isAnywhere) {
+      let mainCategory: Category[] = [];
+      categoriesPlan.forEach((item) => {
+        if (planList.includes(item.type))
+          mainCategory = [...mainCategory, ...item.list];
+      });
+      mainCategory = mainCategory.filter(onlyUnique);
+      goWithList.forEach((item) => {
+        if (mainCategory.includes(item.type))
+          if (item.list.includes(goWithVar)) result.push(item.type);
+      });
+      mainCategory = result;
+      mainCategory.forEach((item) =>
+        mainCategoryOptions.push(new Object({ category: item }))
+      );
+      whereObj = { [Op.or]: mainCategoryOptions };
+    }
+
+    Event.findAll<Event>({
+      where: whereObj as WhereOptions,
+    })
+      .then((events: Array<Event>) => {
+        const result: Event[] = [];
+        const list = events;
+        if (dayVar == DayEvent.Today) {
+          const now = DateTime.format(new Date(), "date");
+          list.forEach((item) => {
+            if (item.date == now) result.push(item);
+          });
+          res.json(result);
+        } else res.json(events);
+      })
       .catch((err: Error) => res.status(500).json(err));
   }
 }

@@ -20,6 +20,7 @@
     "pg": "^8.4.2",
     "pg-hstore": "^2.3.3",
     "python": "0.0.4",
+    "date-fns": "2.16.1",
     "python-shell": "^3.0.0",
     "sequelize": "^5.8.9",
     "sys": "0.0.1",
