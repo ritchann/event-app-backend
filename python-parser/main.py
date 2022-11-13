@@ -65,23 +65,44 @@ def add_columns():
 
     event_cities = {}
     event_categories = {}
+    event_prices = {}
+    event_is_paid = {}
 
     for index, row in df.iterrows():
         text = row['Description']
         event_cities[text] = ''
         event_categories[text] = ''
+        event_prices[text] = ''
+        event_is_paid[text] = 'False'
 
+        # City
         for key, value in cities.items():
             if any(city.lower() in text.lower() for city in value):
                 event_cities[text] = key
                 break
 
+        # Category
         for key, value in categories.items():
             if any(word.lower() in text.lower() for word in value):
                 event_categories[text] = key
 
+        # Payment Information
+        price = ''
+        euro = re.findall('(?:[,\d]+.?\d*[евро]{4})', text)
+        euro_sign = re.findall('(?:[,\d]+.?\d*[€]{1})', text)
+        if euro:
+            price = euro[0]
+        elif euro_sign:
+            price = euro_sign[0]
+        price = re.sub('[^0-9]', '', price)
+        if len(price) > 0:
+            event_prices[text] = f'{price} €'
+            event_is_paid[text] = 'True'
+
     df['City'] = df['Description'].map(event_cities)
     df['Category'] = df['Description'].map(event_categories)
+    df['Payment Information'] = df['Description'].map(event_prices)
+    df['Paid'] = df['Description'].map(event_is_paid)
 
     for index, row in df.iterrows():
         translator = Translator()
