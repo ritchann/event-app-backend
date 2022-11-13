@@ -1,17 +1,10 @@
 import { Sequelize } from "sequelize";
 
-export const database = new Sequelize(process.env.DATABASE_URL, {
-  host: process.env.HOST,
-  database: process.env.DATABASE,
-  username: process.env.USERNAME,
-  port: 5432,
-  password: process.env.PASSWORD,
+export const database = new Sequelize({
+  database: "buildingSite",
   dialect: "postgres",
-  ssl: true,
-  dialectOptions: {
-    ssl: {
-      require: true,
-      rejectUnauthorized: false,
-    },
-  },
+  storage: ":memory:",
+  username: "postgres",
+  password: "123456",
+  host: "localhost",
 });

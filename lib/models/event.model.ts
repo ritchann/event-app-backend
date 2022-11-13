@@ -50,7 +50,7 @@ Event.init(
       type: DataTypes.STRING,
     },
     description: {
-      type: DataTypes.STRING(1000),
+      type: DataTypes.STRING(1500),
     },
     date: {
       type: DataTypes.STRING,
@@ -346,7 +346,7 @@ async function createEvent() {
 
 async function createEventFromCSV() {
   const list: EventInterface[] = [];
-  fs.createReadStream('/app/lib/events.csv')
+  fs.createReadStream('/app/lib/events.csv')//'/app/lib/events.csv'
     .pipe(parse({ delimiter: ",", from_line: 2 }))
     .on("data", async function (row) {
       await Event.create({
@@ -372,7 +372,7 @@ async function createEventFromCSV() {
 }
 
 (async () => {
-  await Event.sync({ force: false }).then(() => {});
-  //await createEvent();
+  await Event.sync({ force: true }).then(() => {});
+  await createEvent();
   await createEventFromCSV();
 })();
