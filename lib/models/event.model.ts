@@ -44,13 +44,13 @@ Event.init(
       primaryKey: true,
     },
     header: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(1000),
     },
     city: {
       type: DataTypes.STRING,
     },
     description: {
-      type: DataTypes.STRING(1500),
+      type: DataTypes.STRING(2500),
     },
     date: {
       type: DataTypes.STRING,
@@ -346,26 +346,25 @@ async function createEvent() {
 
 async function createEventFromCSV() {
   const list: EventInterface[] = [];
-  fs.createReadStream('/app/lib/events.csv')//'/app/lib/events.csv'
+  fs.createReadStream("/app/lib/events.csv") //'/app/lib/events.csv'
     .pipe(parse({ delimiter: ",", from_line: 2 }))
     .on("data", async function (row) {
       await Event.create({
         description: row[1],
         city: row[2],
-        category: row[3],
+        category: row[3] != "" ? parseInt(row[3]) : 0,
         paymentInformation: row[4],
         isPaid: row[5],
-        date: row[6],
-        time: row[7],
+        date: row[7],
+        time: row[8],
         language: 2,
-        header: "",
+        header: row[6],
         address: "",
         status: 2,
         duration: "2",
         id: 0,
       });
     });
-  console.log(list)
   list.forEach(async (x) => {
     await Event.create(x);
   });
