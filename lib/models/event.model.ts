@@ -320,7 +320,7 @@ async function createEvent() {
     address: `Kolektor`,
     isPaid: true,
     paymentInformation: "Tickets from 10€, sold at the Ithaca Bar until Saturday.",
-    status: 2,
+    status: 1,
     duration: "2 hours",
   });
 
@@ -335,7 +335,7 @@ async function createEvent() {
     address: `In the lobby of the Capital Plaza Hotel`,
     isPaid: false,
     paymentInformation: "",
-    status: 2,
+    status: 0,
     duration: "3 hours",
   });
 }

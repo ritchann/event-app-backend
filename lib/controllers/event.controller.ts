@@ -1,5 +1,11 @@
 import { Request, Response } from "express";
-import { PersonalСategory, Category, GoWith, DayEvent } from "../models/enums";
+import {
+  PersonalСategory,
+  Category,
+  GoWith,
+  DayEvent,
+  TimeType,
+} from "../models/enums";
 import {
   UpdateOptions,
   DestroyOptions,
@@ -22,6 +28,13 @@ export interface PersonalInfo {
   goWith: GoWith;
   time: number;
   city: string;
+}
+
+function getTime(value) {
+  var hm = value;
+  var str = hm.split(":");
+  var seconds = +str[0] * 60 * 60 + +str[1] * 60;
+  return seconds / 60;
 }
 
 function onlyUnique(value, index, self) {
@@ -107,10 +120,12 @@ export class EventController {
   }
 
   public getPersonalList(req: Request, res: Response) {
-    const { plan, goWith, day } = req.body;
+    const { plan, goWith, day, time } = req.body;
     const planList = plan as number[];
     const goWithVar = parseInt(goWith);
     const dayVar = parseInt(day);
+    const timeVar = parseInt(time);
+
     const isAnywhere = planList.includes(PersonalСategory.Anywhere);
     const mainCategoryOptions = [];
     var whereObj = new Object();
@@ -133,20 +148,61 @@ export class EventController {
       );
       whereObj = { [Op.or]: mainCategoryOptions };
     }
-
     Event.findAll<Event>({
       where: whereObj as WhereOptions,
     })
       .then((events: Array<Event>) => {
-        const result: Event[] = [];
+        let result: Event[] = [];
         const list = events;
         if (dayVar == DayEvent.Today) {
           const now = DateTime.format(new Date(), "date");
           list.forEach((item) => {
             if (item.date == now) result.push(item);
           });
-          res.json(result);
-        } else res.json(events);
+        } else if (dayVar == DayEvent.Weekends) {
+          var curr = new Date();
+          var sun = new Date(curr.setDate(curr.getDate() - curr.getDay()));
+          var sut = DateTime.addDays(sun, -1);
+          const listDates: string[] = [
+            DateTime.format(sun, "date"),
+            DateTime.format(sut, "date"),
+          ];
+          list.forEach((item) => {
+            if (listDates.includes(item.date)) result.push(item);
+          });
+        } else if (dayVar == DayEvent.Week) {
+          let now = new Date();
+          const listDates: string[] = [];
+          while (now.getDay() != 1) {
+            listDates.push(DateTime.format(now, "date"));
+            now = DateTime.addDays(now, 1);
+          }
+          list.forEach((item) => {
+            if (listDates.includes(item.date)) result.push(item);
+          });
+        }
+        
+        if (timeVar == TimeType.Morning)
+          result = result.filter(
+            (item) => getTime(item.time) >= 360 && getTime(item.time) < 720
+          );
+
+        if (timeVar == TimeType.Day)
+          result = result.filter(
+            (item) => getTime(item.time) >= 720 && getTime(item.time) < 1080
+          );
+
+        if (timeVar == TimeType.Afternoon)
+          result = result.filter(
+            (item) => getTime(item.time) >= 1080 && getTime(item.time) < 1440
+          );
+
+        if (timeVar == TimeType.Night)
+          result = result.filter(
+            (item) => getTime(item.time) >= 0 && getTime(item.time) < 360
+          );
+
+        res.json(result);
       })
       .catch((err: Error) => res.status(500).json(err));
   }
