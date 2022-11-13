@@ -129,13 +129,13 @@ def add_columns():
 
         times = [s.strftime('%H:%M') for s in matches]
         if (all(time == '00:00' for time in times) and len(matches) > 0) or len(matches) == 1:
-            date = matches[0].strftime('%m-%d-%Y')
+            date = matches[0].strftime('%m/%d/%Y')
             if '2022' in date:
                 event_dates[text] = date
                 event_times[text] = matches[0].strftime('%H:%M')
         else:
             for match in matches:
-                date = match.strftime('%m-%d-%Y')
+                date = match.strftime('%m/%d/%Y')
                 time = match.strftime('%H:%M')
                 if time != '00:00':
                     event_dates[text] = date
