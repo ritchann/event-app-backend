@@ -120,11 +120,12 @@ export class EventController {
   }
 
   public getPersonalList(req: Request, res: Response) {
-    const { plan, goWith, day, time } = req.body;
+    const { plan, goWith, day, time, city } = req.body;
     const planList = plan as number[];
     const goWithVar = parseInt(goWith);
     const dayVar = parseInt(day);
     const timeVar = parseInt(time);
+    const isAllCity = city == "all";
 
     const isAnywhere = planList.includes(PersonalСategory.Anywhere);
     const mainCategoryOptions = [];
@@ -148,6 +149,7 @@ export class EventController {
       );
       whereObj = { [Op.or]: mainCategoryOptions };
     }
+    if (!isAllCity) whereObj["city"] = city;
     Event.findAll<Event>({
       where: whereObj as WhereOptions,
     })

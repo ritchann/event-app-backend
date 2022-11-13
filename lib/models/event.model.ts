@@ -1,5 +1,7 @@
 import { Model, DataTypes } from "sequelize";
 import { database } from "../config/database";
+const fs = require("fs");
+const { parse } = require("csv-parse");
 
 export class Event extends Model {
   id!: number;
@@ -32,7 +34,6 @@ export interface EventInterface {
   status: number;
   duration: string;
 }
-
 
 Event.init(
   {
@@ -237,7 +238,8 @@ async function createEvent() {
     language: 0,
     address: "",
     isPaid: true,
-    paymentInformation: "100€ for 3 days of adventure. Children get a discount.",
+    paymentInformation:
+      "100€ for 3 days of adventure. Children get a discount.",
     status: 2,
     duration: "9",
   });
@@ -319,7 +321,8 @@ async function createEvent() {
     language: 1,
     address: `Kolektor`,
     isPaid: true,
-    paymentInformation: "Tickets from 10€, sold at the Ithaca Bar until Saturday.",
+    paymentInformation:
+      "Tickets from 10€, sold at the Ithaca Bar until Saturday.",
     status: 1,
     duration: "2",
   });
@@ -340,7 +343,35 @@ async function createEvent() {
   });
 }
 
+async function createEventFromCSV() {
+  const list: EventInterface[] = [];
+  fs.createReadStream("./lib/models/events.csv")
+    .pipe(parse({ delimiter: ",", from_line: 2 }))
+    .on("data", async function (row) {
+      await Event.create({
+        description: row[1],
+        city: row[2],
+        category: row[3],
+        paymentInformation: row[4],
+        isPaid: row[5],
+        date: row[6],
+        time: row[7],
+        language: 2,
+        header: "",
+        address: "",
+        status: 2,
+        duration: "2",
+        id: 0,
+      });
+    });
+  console.log(list)
+  list.forEach(async (x) => {
+    await Event.create(x);
+  });
+}
+
 (async () => {
-  await Event.sync({ force: true }).then(() => {});
-  await createEvent();
+  await Event.sync({ force: false }).then(() => {});
+  //await createEvent();
+  await createEventFromCSV();
 })();
