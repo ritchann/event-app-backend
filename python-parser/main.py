@@ -3,6 +3,8 @@ import logging
 import re
 from datetime import datetime
 
+import datefinder
+import nltk
 import numpy as np
 import pandas as pd
 from googletrans import Translator
@@ -10,7 +12,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from telethon import TelegramClient
 from telethon import functions
 from telethon.tl.types import PeerChannel
-import datefinder
+
 import settings
 from constants import key_words, stop_words, cities, categories
 
@@ -67,6 +69,7 @@ def add_columns():
     event_categories = {}
     event_prices = {}
     event_is_paid = {}
+    event_headers = {}
     event_dates = {}
     event_times = {}
 
@@ -111,11 +114,17 @@ def add_columns():
         translator = Translator()
         row['Description'] = translator.translate(row['Description'], dest='en').text
 
-        # Date and time
         text = row['Description']
-
+        event_headers[text] = ''
         event_dates[text] = ''
         event_times[text] = ''
+
+        # Header
+        sent_detector = nltk.data.load('tokenizers/punkt/english.pickle')
+        sent_detector._params.abbrev_types.add('hon')
+        event_headers[text] = sent_detector.tokenize(text)[0]
+
+        # Date and time
         matches = list(datefinder.find_dates(text))
 
         times = [s.strftime('%H:%M') for s in matches]
@@ -133,6 +142,7 @@ def add_columns():
                     event_times[text] = time
                     break
 
+    df['Header'] = df['Description'].map(event_headers)
     df['Date'] = df['Description'].map(event_dates)
     df['Time'] = df['Description'].map(event_times)
 
