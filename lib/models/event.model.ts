@@ -108,7 +108,7 @@ async function createEvent() {
     isPaid: true,
     paymentInformation: "55€",
     status: 2,
-    duration: "3 hours",
+    duration: "3",
   });
 
   await Event.create({
@@ -123,7 +123,7 @@ async function createEvent() {
     isPaid: false,
     paymentInformation: "",
     status: 2,
-    duration: "2 hours",
+    duration: "2",
   });
 
   await Event.create({
@@ -142,7 +142,7 @@ async function createEvent() {
     isPaid: false,
     paymentInformation: "",
     status: 2,
-    duration: "4 hours",
+    duration: "4",
   });
 
   await Event.create({
@@ -157,7 +157,7 @@ async function createEvent() {
     isPaid: false,
     paymentInformation: "",
     status: 2,
-    duration: "2 hours",
+    duration: "2",
   });
 
   await Event.create({
@@ -173,7 +173,7 @@ async function createEvent() {
     isPaid: true,
     paymentInformation: "10€ (child + adult)",
     status: 2,
-    duration: "2 hours",
+    duration: "2",
   });
 
   await Event.create({
@@ -195,7 +195,7 @@ async function createEvent() {
     isPaid: true,
     paymentInformation: "15€",
     status: 2,
-    duration: "2 hours",
+    duration: "2",
   });
 
   await Event.create({
@@ -216,7 +216,7 @@ async function createEvent() {
     isPaid: true,
     paymentInformation: "15€",
     status: 2,
-    duration: "2 hours",
+    duration: "2",
   });
 
   await Event.create({
@@ -239,7 +239,7 @@ async function createEvent() {
     isPaid: true,
     paymentInformation: "100€ for 3 days of adventure. Children get a discount.",
     status: 2,
-    duration: "9 hours",
+    duration: "9",
   });
 
   await Event.create({
@@ -254,7 +254,7 @@ async function createEvent() {
     isPaid: false,
     paymentInformation: "",
     status: 2,
-    duration: "3 hours",
+    duration: "3",
   });
 
   await Event.create({
@@ -270,7 +270,7 @@ async function createEvent() {
     isPaid: false,
     paymentInformation: "",
     status: 2,
-    duration: "2 hours",
+    duration: "2",
   });
 
   await Event.create({
@@ -287,7 +287,7 @@ async function createEvent() {
     isPaid: true,
     paymentInformation: "10€",
     status: 2,
-    duration: "2 hours",
+    duration: "2",
   });
 
   await Event.create({
@@ -304,7 +304,7 @@ async function createEvent() {
     isPaid: true,
     paymentInformation: "10€",
     status: 2,
-    duration: "2 hours",
+    duration: "2",
   });
 
   await Event.create({
@@ -321,7 +321,7 @@ async function createEvent() {
     isPaid: true,
     paymentInformation: "Tickets from 10€, sold at the Ithaca Bar until Saturday.",
     status: 1,
-    duration: "2 hours",
+    duration: "2",
   });
 
   await Event.create({
@@ -336,7 +336,7 @@ async function createEvent() {
     isPaid: false,
     paymentInformation: "",
     status: 0,
-    duration: "3 hours",
+    duration: "3",
   });
 }
 
