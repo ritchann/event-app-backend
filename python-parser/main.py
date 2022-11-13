@@ -10,7 +10,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from telethon import TelegramClient
 from telethon import functions
 from telethon.tl.types import PeerChannel
-
+import datefinder
 import settings
 from constants import key_words, stop_words, cities, categories
 
@@ -67,6 +67,8 @@ def add_columns():
     event_categories = {}
     event_prices = {}
     event_is_paid = {}
+    event_dates = {}
+    event_times = {}
 
     for index, row in df.iterrows():
         text = row['Description']
@@ -105,8 +107,34 @@ def add_columns():
     df['Paid'] = df['Description'].map(event_is_paid)
 
     for index, row in df.iterrows():
+        # Payment Information
         translator = Translator()
         row['Description'] = translator.translate(row['Description'], dest='en').text
+
+        # Date and time
+        text = row['Description']
+
+        event_dates[text] = ''
+        event_times[text] = ''
+        matches = list(datefinder.find_dates(text))
+
+        times = [s.strftime('%H:%M') for s in matches]
+        if (all(time == '00:00' for time in times) and len(matches) > 0) or len(matches) == 1:
+            date = matches[0].strftime('%m-%d-%Y')
+            if '2022' in date:
+                event_dates[text] = date
+                event_times[text] = matches[0].strftime('%H:%M')
+        else:
+            for match in matches:
+                date = match.strftime('%m-%d-%Y')
+                time = match.strftime('%H:%M')
+                if time != '00:00':
+                    event_dates[text] = date
+                    event_times[text] = time
+                    break
+
+    df['Date'] = df['Description'].map(event_dates)
+    df['Time'] = df['Description'].map(event_times)
 
     df.to_csv(f'events_final_{datetime.now().strftime("%H:%M:%S")}.csv')
 
