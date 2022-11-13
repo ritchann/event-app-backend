@@ -2,6 +2,7 @@ import { Model, DataTypes } from "sequelize";
 import { database } from "../config/database";
 const fs = require("fs");
 const { parse } = require("csv-parse");
+const path = require("path");
 
 export class Event extends Model {
   id!: number;
@@ -345,7 +346,7 @@ async function createEvent() {
 
 async function createEventFromCSV() {
   const list: EventInterface[] = [];
-  fs.createReadStream("./lib/models/events.csv")
+  fs.createReadStream(path.join(__dirname + "/lib/models/events.csv"))
     .pipe(parse({ delimiter: ",", from_line: 2 }))
     .on("data", async function (row) {
       await Event.create({
